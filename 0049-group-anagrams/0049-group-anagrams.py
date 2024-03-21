@@ -1,15 +1,10 @@
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        hashtable = {}
+        hashtable = defaultdict(list)
         for string in strs:
-            if tuple(sorted(string)) in hashtable:
-                # add to old group
-                hashtable[tuple(sorted(string))].append(string)
-            else:
-                # create a new group
-                hashtable[tuple(sorted(string))] = [string]
-
-        result = []
-        for key in hashtable:
-            result.append(hashtable[key])
-        return result
+            count = [0] * 26
+            for character in string:
+                count[ord(character) - ord("a")] += 1
+            hashtable[tuple(count)].append(string)
+        
+        return hashtable.values()
