@@ -3,17 +3,35 @@ class Solution:
         if len(s1) > len(s2):
             return False
 
-        letters_s1 = {}
-        for letter in s1:
-            letters_s1[letter] = 1 + letters_s1.get(letter, 0)
-        
+        s1_count, s2_count = [0] * 26, [0] * 26
+        for i in range(len(s1)):
+            s1_count[ord(s1[i]) - ord('a')] += 1
+            s2_count[ord(s2[i]) - ord('a')] += 1
+
+        matches = 0
+        for i in range(26):
+            if s1_count[i] == s2_count[i]:
+                matches += 1
+
         left = 0
-        for right in range(left + len(s1) - 1, len(s2)):
-            letters_s2 = {}
-            for index in range(left, right + 1):
-                letters_s2[s2[index]] = 1 + letters_s2.get(s2[index], 0)
-            if letters_s2 == letters_s1:
+        for right in range(len(s1), len(s2)):
+            if matches == 26:
                 return True
+            
+            index = ord(s2[right]) - ord('a')
+            s2_count[index] += 1
+            if s2_count[index] == s1_count[index]:
+                matches += 1
+            elif s1_count[index] + 1 == s2_count[index]:
+                matches -= 1
+
+            index = ord(s2[left]) - ord('a')
+            s2_count[index] -= 1
+            if s2_count[index] == s1_count[index]:
+                matches += 1
+            elif s1_count[index] - 1 == s2_count[index]:
+                matches -= 1
+            
             left += 1
-        
-        return False
+
+        return matches == 26
