@@ -8,16 +8,15 @@ class Solution:
         length = 0
         letters = set()
 
-        while right < len(s) and left < len(s):
+        while right < len(s):
             if s[right] not in letters:
                 length += 1
                 letters.add(s[right])
                 max_length = max(max_length, length)
                 right += 1
             else:
+                letters.remove(s[left])
                 left += 1
-                right = left
-                length = 0
-                letters = set()
-        
+                length -= 1
+                
         return max_length
